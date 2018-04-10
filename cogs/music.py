@@ -140,23 +140,14 @@ class Music:
 
     @commands.command(pass_context=True, no_pm=True)
     async def skip(self, ctx):
-        """Votes to skip song. 2 votes are needed to skip."""
+        """Votes to skip song."""
         if not self.player.playing():
             await self.bot.say("Currently not playing anything...")
             return
 
-        voter = ctx.message.author
-        if voter.id not in self.skip_votes:
-            self.skip_votes.add(voter.id)
-            cur_votes = len(self.skip_votes)
-            if cur_votes >= 2:
-                await self.bot.say("Skipping song...")
-                self.player.skip()
-                self.skip_votes.clear()
-            else:
-                await self.bot.say("Added vote, currently at {}/2 votes.".format(cur_votes))
-        else:
-            await self.bot.say("You have already voted to skip this song.")
+        await self.bot.say("Skipping song...")
+        self.player.skip()
+        self.skip_votes.clear()
 
     @commands.command(pass_context=True, no_pm=True, description="Valid volume is between 0 and 200. Only permitted users can do this.")
     async def volume(self, ctx, vol = ""):
